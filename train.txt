@@ -1,0 +1,11 @@
+#### 1. 有监督训练
+nohup python train.py --cfg configs/sup/custom/kuai_yolov5n_20per.yaml
+#### 2. 半监督训练
+python train.py --cfg configs/ssod/custom/yolov5l_1per_ssod.yaml
+#### 3. 测试全监督模型.
+python val.py --data data/data.yaml --weights sup_runs/Baseline/base/weights/best.pt --task test --name test
+#### 4. 测试半监督模型.
+python val.py --cfg configs/ssod/custom/yolov5l_custom_ssod.yaml --weights ssod_runs/SPP_LSKA/SPP_LSKA+SimOTA+Siou/weights/best.pt --task test --name SPP_LKSA
+#### 5. 推理.
+python detect.py --weights sup_runs/Baseline/Base/weights/best.pt --source data/images/val2 --name yolov5n
+python detect.py --weights ssod_runs/yolov5n_1per_exp1_ssod//weights/best.pt --source data/images/val --name detect

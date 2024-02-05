@@ -1,0 +1,51 @@
+project: 'sup_runs/percent'
+name : '20per'
+adam: False
+epochs: 1
+weights: ''
+prune_finetune: False
+cache: False # Requires large memory
+
+hyp:
+  lr0: 0.01
+  hsv_h: 0.015
+  hsv_s: 0.7
+  hsv_v: 0.4
+  lrf: 0.2
+  warmup_epochs: 0
+  no_aug_epochs: 0
+
+Model:
+  depth_multiple: 0.33  # model depth multiple
+  width_multiple: 0.25  # layer channel multiple s_0.5
+  Backbone: 
+    name: 'YoloV5'
+    activation: 'SiLU'
+  Neck: 
+    name: 'YoloV5' 
+    in_channels: [256, 512, 1024]
+    out_channels: [256, 512, 1024]
+    activation: 'SiLU'
+  Head: 
+    name: 'YoloV5'
+    activation: 'SiLU'
+  anchors: [[10,13, 16,30, 33,23],[30,61, 62,45, 59,119],[116,90, 156,198, 373,326]]  # P5/32]
+
+Loss:
+  type: 'ComputeLoss'
+  assigner_type : 'SimOTA'  #TAL/SimOTA/AnchorBased/ATSS
+  top_k : 10
+
+
+Dataset:
+  data_name: 'vehicle'
+  train: data/20per/train_20.txt  # 4000 images
+  val: data/20per/train_20.txt  # 1218 images
+  test: data/test.txt # 0 of 5218 images
+  nc: 7  # number of classes
+  np: 0 #number of keypoints
+  names: ['car', 'van', 'truck', 'suv', 'light truck', 'tanker', 'bus']
+  
+  img_size: 640
+  batch_size: 32
+  workers : 8
